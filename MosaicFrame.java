@@ -12,16 +12,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-public class MosaicFrame extends JFrame
+public class MosaicFrame extends JFrame implements ActionListener
 {
-  private final double VERSION = 1.0;
+  private final double VERSION = 2.0;
   private ArrayList<XAndOTile> tiles;
-  public MosaicFrame()
+  private int tileAmount;
+  public MosaicFrame(int tileAmount)
   {
     setTitle("Mosaic " + VERSION);
-    setBounds(100, 100, 400, 600);
+    setBounds(100, 100, 800, 800);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+    this.tileAmount = tileAmount;
     Container contentPane = getContentPane();
     contentPane.setLayout(new BorderLayout());
 
@@ -30,15 +32,27 @@ public class MosaicFrame extends JFrame
 
     JButton randomButton = new JButton("Randomize");
     buttonPanel.add(randomButton);
+    randomButton.addActionListener(this);
 
-    JPanel xAndOPanel = new JPanel();
-    contentPane.add(xAndOPanel, BorderLayout.CENTER);
-    xAndOPanel.setLayout(new GridLayout(3, 3));
+    JPanel tilePanel = new JPanel();
+    contentPane.add(tilePanel, BorderLayout.CENTER);
+    tilePanel.setLayout(new GridLayout(tileAmount, tileAmount));
 
     tiles = new ArrayList<XAndOTile>();
-    for(int i = 0; i < 9; i++)
+    for(int i = 0; i < tileAmount * tileAmount; i++)
     {
-      xAndOPanel.add(new XAndOTile());
+      XAndOTile tile = new XAndOTile();
+      tiles.add(tile);
+      tilePanel.add(tile);
     }
+  }
+  public void actionPerformed(ActionEvent e)
+  {
+    for(XAndOTile tile : tiles)
+    {
+      tile.setRandomValues();
+      System.out.println(tile);
+    }
+    repaint();
   }
 }
